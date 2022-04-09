@@ -9,7 +9,9 @@ for i in range(1, 4):
             admin.choose_option()
         case 'кассир':
             seller = seller_options()
-            seller.choose_option()
+            end = seller.choose_option()
+            if end == 'end':
+                exit(0)
         case _:
             print('Неверная учётная запись. Попробуйте ещё раз')
 
