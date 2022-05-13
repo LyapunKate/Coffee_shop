@@ -1,17 +1,18 @@
-from seller import seller_options
+from client import seller_options
 from admin import admin_options
+import threading
+
 for i in range(1, 4):
     print('Выберете учётную запись:\n 1. администратор\n 2. кассир ')
     pearsontype = input()
     match pearsontype:
         case 'администратор':
             admin = admin_options()
-            admin.choose_option()
+            a_thread = threading.Thread(target= admin.choose_option(), )
+            a_thread.start()
         case 'кассир':
             seller = seller_options()
-            end = seller.choose_option()
-            if end == 'end':
-                exit(0)
+            s_thread = threading.Thread(target= seller.choose_option(), )
+            s_thread.start()
         case _:
             print('Неверная учётная запись. Попробуйте ещё раз')
-
