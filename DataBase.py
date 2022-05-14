@@ -29,7 +29,7 @@ class Data:
       port=5432
     )
     cursor = con.cursor()
-    cursor.execute("INSERT INTO Work(surname, start_date) Values ({}, '{}')".format(who, start_date))
+    cursor.execute("INSERT INTO Work(surname, start_date) Values ('{}', '{}')".format(who, start_date))
 # Получаем результат сделанного запро
     con.commit()
     cursor.close()
@@ -43,7 +43,7 @@ class Data:
       port=5432
     )
     cursor = con.cursor()
-    cursor.execute("UPDATE Work SET end_date = '{}' where surname = {} and end_date IS NULL".format(end_date, who))
+    cursor.execute("UPDATE Work SET end_date = '{}' where surname = '{}' and end_date IS NULL".format(end_date, who))
     # Получаем результат сделанного запро
     con.commit()
     cursor.close()
@@ -57,7 +57,7 @@ class Data:
       port=5432
     )
     cursor = con.cursor()
-    cursor.execute("INSERT INTO purchases(ProductID, Quantity, DateTime) Values ({}, {}, '{}')".format(id, quantity, time))
+    cursor.execute("INSERT INTO purchases(ProductID, Quantity, DateTime) Values ('{}', '{}', '{}')".format(id, quantity, time))
     # Получаем результат сделанного запро
     con.commit()
     cursor.close()
@@ -125,6 +125,7 @@ class Data:
     cursor.close()
 
   def select_worker_id(self, name, surname, middlename):
+    global id_result_select
     con = psycopg2.connect(
       database='Coffee',
       user='postgres',
@@ -133,13 +134,13 @@ class Data:
       port=5432
     )
     cursor = con.cursor()
-    cursor.execute("SELECT ID FROM SELLERS WHERE Name = {} AND Surname = {} AND MiddleName = {}").format(name, surname, middlename)
+    cursor.execute("SELECT ID FROM SELLERS WHERE Name = '{}' AND Surname = '{}' AND MiddleName = '{}'".format(name, surname, middlename))
     # Получаем результат сделанного запроса
     results = cursor.fetchall()
     for row in results:
-      id_result = row[0]
+      id_result_select = row[0]
     cursor.close()
-    return id_result
+    return id_result_select
 
   def delete_worker_sellers(self, name, surname, middlename):
     con = psycopg2.connect(
@@ -151,7 +152,7 @@ class Data:
     )
     cursor = con.cursor()
     cursor.execute(
-      "DELETE FROM SELLERS WHERE SELLERS.NAME = {} AND SELLERS.SURNAME = {} AND SELLERS.MIDDLENAME = {}".format(name, surname, middlename))
+      "DELETE FROM SELLERS WHERE SELLERS.NAME = '{}' AND SELLERS.SURNAME = '{}' AND SELLERS.MIDDLENAME = '{}'".format(name, surname, middlename))
     # Получаем результат сделанного запроса
     con.commit()
     cursor.close()
@@ -166,13 +167,13 @@ class Data:
       )
       cursor = con.cursor()
       cursor.execute(
-        "DELETE FROM ADRESS WHERE ADRESS.ID = {}".format(id))
+        "DELETE FROM ADRESS WHERE ADRESS.ID = '{}'".format(id))
       # Получаем результат сделанного запроса
       con.commit()
       cursor.close()
 
   def select_purch(self, what, where, how):
-    global select_result
+    #global select_result
     con = psycopg2.connect(
       database='Coffee',
       user='postgres',
@@ -210,9 +211,8 @@ class Data:
         port=5432
       )
       cursor = con.cursor()
-      cursor.execute("SELECT * FROM QUANTITY WHERE QUANTITY.PRODUCT_NAME = {}").format(product)
+      cursor.execute("SELECT * FROM QUANTITY WHERE PRODUCT_NAME = '{}'".format(product))
       # Получаем результат сделанного запроса
       results = cursor.fetchall()
-      cursor.close()
+      #cursor.close()
       return results
-
