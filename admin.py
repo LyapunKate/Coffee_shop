@@ -1,24 +1,27 @@
 from DataBase import Data
 
 class admin_options:
-    def choose_option(self):
-        print('Выберете дальнейшее действие:\n 1. Работники\n 2. Продажи\n 3. Склад\n')
+    def choose_option(self, window):
+        print('Выберете дальнейшее действие:\n 1. Работники\n 2. Продажи\n 3. Склад\n 4. Закончить работу\n')
         for i in range(1, 4):
             activities = input()
             match activities:
                 case 'Работники':
-                    self.workers()
+                    self.workers(window)
+                    break
                 case 'Продажи':
-                    self.purchases()
+                    self.purchases(window)
+                    break
                 case 'Склад':
-                    self.quantity()
+                    self.quantity(window)
+                    break
+                case 'Закончить работу':
+                    self.admin_end_work(window)
                 case _:
                     print('Неверное действие. Попробуйте ещё раз')
 
-    def workers(self):
+    def workers(self, window):
         data = Data()
-        global end
-        end = 'begin'
         print('Выберете дальнейшее действие:\n 1. Посмотреть\n 2. Добавить работника\n 3. Удалить работника\n')
         for i in range(1, 4):
             activities = input()
@@ -27,18 +30,17 @@ class admin_options:
                     print(data.select_workers(),'\n')
                     break
                 case 'Добавить работника':
-                    end = self.insert_worker()
+                    self.insert_worker(window)
                     break
                 case 'Удалить работника':
-                    self.delete_worker()
+                    self.delete_worker(window)
                     break
-                    print('Удалено успешно')
                 case _:
                     print('Неверное действие. Попробуйте ещё раз')
-        self.choose_option()
+        self.choose_option(window)
 
 
-    def insert_worker(self):
+    def insert_worker(self, window):
         data = Data()
         print('Введите имя\n')
         name = input()
@@ -57,9 +59,9 @@ class admin_options:
         print('Номер дома\n')
         house = input()
         data.insert_worker_adress(result, state, city, street, house)
-        self.choose_option()
+        self.choose_option(window)
 
-    def delete_worker(self):
+    def delete_worker(self, window):
         data = Data()
         print('Введите имя\n')
         name = input()
@@ -70,10 +72,11 @@ class admin_options:
         data.delete_worker_sellers(name, surname, middlename)
         result = data.select_worker_id(name, surname, middlename)
         data.delete_worker_adress(result)
-        self.choose_option()
+        print('Удалено успешно')
+        self.choose_option(window)
 
 
-    def purchases(self):
+    def purchases(self, window):
         global worker_sel_id, product_sel_id
         data = Data()
 
@@ -116,11 +119,11 @@ class admin_options:
                 print(data.select_purch('*', 'Purchases',
                                         'PearsonID = {} AND ProductID = {} AND date BETWEEN "{}" AND "{}"'.format(
                                             worker_sel_id, product_sel_id, start_date, end_date)))
-        self.choose_option()
+        self.choose_option(window)
 
 
 
-    def quantity(self):
+    def quantity(self, window):
         data = Data()
         print('Выберете дальнейшее действие:\n 1. Посмотреть всё\n 2. Посмотреть по товарам\n')
         for i in range(1, 3):
@@ -136,4 +139,9 @@ class admin_options:
                     break
                 case _:
                     print('Неверное действие. Попробуйте ещё раз')
-        self.choose_option()
+        self.choose_option(window)
+
+    def admin_end_work(self, window):
+        window.quit()
+        print('Работа успешно закончена')
+        return
