@@ -24,17 +24,18 @@ class admin_options:
             activities = input()
             match activities:
                 case 'Посмотреть':
-                    print(data.select_workers())
+                    print(data.select_workers(),'\n')
                     break
                 case 'Добавить работника':
                     end = self.insert_worker()
                     break
                 case 'Удалить работника':
-                    data.delete_workers()
+                    self.delete_worker()
                     break
                     print('Удалено успешно')
                 case _:
                     print('Неверное действие. Попробуйте ещё раз')
+        self.choose_option()
 
 
     def insert_worker(self):
@@ -56,6 +57,7 @@ class admin_options:
         print('Номер дома\n')
         house = input()
         data.insert_worker_adress(result, state, city, street, house)
+        self.choose_option()
 
     def delete_worker(self):
         data = Data()
@@ -68,6 +70,7 @@ class admin_options:
         data.delete_worker_sellers(name, surname, middlename)
         result = data.select_worker_id(name, surname, middlename)
         data.delete_worker_adress(result)
+        self.choose_option()
 
 
     def purchases(self):
@@ -77,25 +80,25 @@ class admin_options:
         print('Выберете фильтр. Если вы не хотите фильтровать по соответствующему полю, напишите 0 а если хотите - запишите значение\n')
         print('Кассир -- \n')
         worker = input()
-        if worker != 0:
-            worker_sel_id = data.select('id', 'Sellers', 'sellers.surname = {}'.format(worker))
+        if worker != '0':
+            worker_sel_id = data.select('id', 'Sellers', "sellers.surname = '{}'".format(worker))
         print('Продукт -- \n')
         product = input()
-        if product != 0:
-            product_sel_id = data.select('id', 'Products', 'ProductName = {}'.format(product))
+        if product != '0':
+            product_sel_id = data.select('id', 'Products', "ProductName = '{}'".format(product))
         print('Начальная дата --\n')
         start_date = input()
 
-        if start_date == 0:
-            if worker != 0 and product == 0:
+        if start_date == '0':
+            if worker != '0' and product == '0':
                 print(data.select_purch('*', 'Purchases',
                                         'PearsonID = {}'.format(
                                             worker_sel_id)))
-            if worker == 0 and product != 0:
+            if worker == '0' and product != '0':
                 print(data.select_purch('*', 'Purchases',
                                         'ProductID = {}'.format(
                                             product_sel_id)))
-            if worker != 0 and product != 0:
+            if worker != '0' and product != '0':
                 print(data.select_purch('*', 'Purchases',
                                         'PearsonID = {} AND ProductID = {}'.format(
                                             worker_sel_id, product_sel_id)))
@@ -103,16 +106,17 @@ class admin_options:
             print('Конечная дата* --\n')
             end_date = input()
 
-            if worker != 0 and product == 0:
+            if worker != '0' and product == '0':
                 print(data.select_purch('*', 'Purchases',
-                                        'PearsonID = {} AND date BETWEEN {} {}!!!!!синтаксис проверить!!!!!!'.format(worker_sel_id,start_date, end_date)))
-            if worker == 0 and product != 0:
+                                        'PearsonID = {} AND date BETWEEN "{}" AND "{}"'.format(worker_sel_id,start_date, end_date)))
+            if worker == '0' and product != '0':
                 print(data.select_purch('*', 'Purchases',
-                                        'ProductID = {} AND date BETWEEN {} {}!!!!!синтаксис проверить!!!!!!'.format(product_sel_id,start_date, end_date)))
-            if worker != 0 and product != 0:
+                                        'ProductID = {} AND date BETWEEN "{}" AND "{}"'.format(product_sel_id,start_date, end_date)))
+            if worker != '0' and product != '0':
                 print(data.select_purch('*', 'Purchases',
-                                        'PearsonID = {} AND ProductID = {} AND date BETWEEN {} {}!!!!!синтаксис проверить!!!!!!'.format(
+                                        'PearsonID = {} AND ProductID = {} AND date BETWEEN "{}" AND "{}"'.format(
                                             worker_sel_id, product_sel_id, start_date, end_date)))
+        self.choose_option()
 
 
 
@@ -132,4 +136,4 @@ class admin_options:
                     break
                 case _:
                     print('Неверное действие. Попробуйте ещё раз')
-
+        self.choose_option()
