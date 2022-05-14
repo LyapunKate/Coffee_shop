@@ -1,20 +1,21 @@
 from seller import seller_options
 from admin import admin_options
 from tkinter import *
+import threading
+
 
 def administrator():
+    global  window
     admin = admin_options()
-    admin.choose_option()
+    a_thread = threading.Thread(target=admin.choose_option(window), )
+    a_thread.start()
 
 def kassir():
     global window
-    global end
-    Seller = seller_options()
-    end = Seller.choose_option(window)
-    if end == 'end':
-        exit(0)
+    seller = seller_options()
+    s_thread = threading.Thread(target=seller.choose_option(window), )
+    s_thread.start()
 
-global end
 for i in range(1, 4):
     global window
     window = Tk()
@@ -27,22 +28,3 @@ for i in range(1, 4):
     btn2 = Button(window, text="Кассир", command=kassir)
     btn2.grid(column=0, row=2)
     window.mainloop()
-
-    if end == 'end':
-        exit(0)
-
-
-    # print('Выберете учётную запись:\n 1. администратор\n 2. кассир ')
-    #pearsontype = input()
-    #match pearsontype:
-    #    case 'администратор':
-    #        admin = admin_options()
-    #        admin.choose_option()
-    #    case 'кассир':
-    #        seller = seller_options()
-    #        end = seller.choose_option()
-    #        if end == 'end':
-    #            exit(0)
-    #    case _:
-    #        print('Неверная учётная запись. Попробуйте ещё раз')
-
